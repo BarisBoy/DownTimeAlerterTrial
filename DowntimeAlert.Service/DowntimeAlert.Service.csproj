@@ -1,0 +1,17 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.2</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
+    <PackageReference Include="RestSharp" Version="106.11.5" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\DowntimeAlert.Data\DowntimeAlert.Data.csproj" />
+    <ProjectReference Include="..\DowntimeAlert.Repo\DowntimeAlert.Repo.csproj" />
+  </ItemGroup>
+
+</Project>

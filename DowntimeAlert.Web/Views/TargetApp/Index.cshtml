@@ -1,0 +1,107 @@
+﻿@model DowntimeAlert.Web.Models.TargetAppModels.TargetAppListViewModel
+@{
+    ViewData["Title"] = "List Page";
+}
+<link type="text/css" rel="stylesheet" href="styles/bootstrap.min.css">
+<script src="script/bootstrap.min.js"></script>
+<script src="script/jquery-1.10.2.min.js"></script>
+<style>
+    body {
+        background-image: url('/images/bg/bg.jpg');
+        height: 100%;
+        background-position: center;
+        background-repeat: no-repeat;
+        background-size: cover;
+        background-color: #cccccc;
+    }
+
+    .centered-form {
+        margin-top: 60px;
+    }
+
+        .centered-form .panel {
+            background: rgba(255, 255, 255, 0.8);
+            box-shadow: rgba(0, 0, 0, 0.3) 20px 20px 20px;
+        }
+</style>
+<div class="container">
+    <nav class="navbar navbar-default">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="/">Downtime Alerter</a>
+            </div>
+            <ul class="nav navbar-nav">
+                <li><a href="/TargetApp">Target Apps</a></li>
+            </ul>
+        </div>
+    </nav>
+    <div class="row centered-form" style="margin-top: 150px;">
+        @if (TempData["message"] != null)
+        {
+            string alertType = "alert alert-" + TempData["alertType"];
+            <div class="@alertType">
+                <strong>Alert!</strong> @TempData["message"]
+            </div>
+        }
+        <div class="col-md-12">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">
+                        Target App List
+                    </h3>
+                </div>
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>App Name</th>
+                                <th>Url</th>
+                                <th>Created Time</th>
+                                <th>Monitoring Interval</th>
+                                <th>Operations</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (Model.TargetAppList != null && Model.TargetAppList.Count() > 0)
+                            {
+                                foreach (var item in Model.TargetAppList)
+                                {
+                            <tr>
+                                <td>@item.Name</td>
+                                <td>@item.Url</td>
+                                <td>@item.CreatedTime</td>
+                                <td>Every @item.MonitoringInterval mins</td>
+                                <td> <a href="~/TargetApp/Monitor/?id=@item.Id" class="btn btn-info text-info"> Monitor </a> | <a href="~/TargetApp/CreateTargetApp/?id=@item.Id&userId=@Model.UserId" class="btn btn-warning text-warning"> Edit </a> | <button data-model-id="@item.Id" class="btn btn-danger text-danger delete-target-app"> Delete </button> </td>
+                            </tr>
+                                }
+                            }
+                            else
+                            {
+                                <tr>
+                                    <td>There is no item found!</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                    <a href="~/TargetApp/CreateTargetApp/?userId=@Model.UserId" class="btn btn-success text-success" data-ajax="true" data-ajax-method="GET"> Add New App </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(".delete-target-app").click(function () {
+        var StudentId = $(this).data("model-id");
+        var url = "/TargetApp/DeleteTargetApp/" + StudentId;
+        $.ajax({
+            url: url,
+            type: 'Delete',
+        }).done(function () {
+            alert("Deleted successfully!");
+            window.location.reload();
+        }).error(function () {
+            alert("Failed!");
+        });
+    });
+</script>
